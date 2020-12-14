@@ -5,6 +5,10 @@
   text-align: center;
 }
 
+.App-h1 {
+  color: #1d9629
+}
+
 .App-header {
   min-height: 100vh;
   display: flex;
