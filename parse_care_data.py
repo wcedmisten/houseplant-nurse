@@ -21,5 +21,5 @@ for row in rows:
 with open('plant_care_data.csv', 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['scientific_name','common_name','light','temperature','humidity','watering','soil'])
-    for row in data[3:]: # skip the header data in this table
-        writer.writerow(row)
+    for i, row in enumerate(data[3:]): # skip the header data in this table
+        writer.writerow([i] + row)
