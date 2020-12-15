@@ -33,20 +33,27 @@ function getFileName(scientificName) {
   return `${process.env.PUBLIC_URL}/assets/plant-images/${suffix}.jpg`
 }
 
-function plantList() {
-  return getPlants().map(plant =>
-    <ListItem>
+function plantList(plants) {
+  return plants.map(plant =>
+    <ListItem key={plant.id}>
       <ListItemAvatar>
-        <Avatar src={getFileName(plant.scientificName)} />
+        <Avatar src={getFileName(plant.ScientificName)} />
       </ListItemAvatar>
       <ListItemText
-        primary={plant.commonName}
+        primary={plant.CommonName}
       />
     </ListItem>
   );
 }
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      plants: []
+    };
+  }
+
   render() {
     return (
       <div className="App">
@@ -54,12 +61,21 @@ class App extends Component {
         <h1 className="App-h1">Houseplant Nurse 🌱</h1>
         <div className="plantList">
           <List dense="false">
-            {plantList()}
+            {plantList(this.state.plants)}
           </List>
         </div>
         </header>
       </div>
     );
+  }
+
+  componentDidMount() {
+    fetch(`${process.env.PUBLIC_URL}/api/plants`)
+        .then(res => res.json())
+        .then((data) => {
+          this.setState({ plants: data.plants })
+        })
+        .catch(console.log)
   }
 }
 

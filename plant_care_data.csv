@@ -1,4 +1,4 @@
-scientific_name,common_name,light,temperature,humidity,watering,soil
+id,scientific_name,common_name,light,temperature,humidity,watering,soil
 0,Abutilon hybridum,Flowering Maple,1,1,2,2,1
 1,Acalypha hispida,Chenile Plant,1,2,2,2,1
 2,Achimenes hybrids,Magic Flower,2,2,2,1,7
@@ -34,7 +34,7 @@ scientific_name,common_name,light,temperature,humidity,watering,soil
 32,Asparagus falcatus,Sickle Thorn,2-3,2,2,2,2
 33,Aspidistra elatior,Cast Iron Plant,3-4,2,3,2,2
 34,Asplenium daucifolium,Mother Fern,3,2,2,1,6
-35,Asokebuyn budys,Bird’s Nest Fern,3,2,2,1,6
+35,Asplenium nidus,Bird’s Nest Fern,3,2,2,1,6
 36,Astrophytum myriostigma,Bishop’s Cap,2,2,3,3,5
 37,Beaucarnea recurvata,Ponytail,1,2,3,3,5
 38,Begonia cubensis,Cuban Holly,2-3,2,2,2,2
