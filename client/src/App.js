@@ -20,24 +20,16 @@ class Plant {
   }
 }
 
-function getPlants() {
-  return [
-    new Plant(1,"Abutilon hybridum","Flowering Maple",1,1,2,2,1),
-    new Plant(2,"Acalypha hispida","Chenile Plant",1,2,2,2,1),
-    new Plant(3,"Achimenes hybrids","Magic Flower",2,2,2,1,7)
-  ]
-}
-
 function getFileName(scientificName) {
-  const suffix = scientificName.toLowerCase().replace(" ", "-");
-  return `${process.env.PUBLIC_URL}/assets/plant-images/${suffix}.jpg`
+  const suffix = scientificName.split('‘')[0].trim().toLowerCase().replace(" ", "-");
+  return `${process.env.PUBLIC_URL}/assets/plant-avatars/${suffix}.jpg`
 }
 
 function plantList(plants) {
   return plants.map(plant =>
     <ListItem key={plant.id}>
       <ListItemAvatar>
-        <Avatar src={getFileName(plant.ScientificName)} />
+        <Avatar size="large" src={getFileName(plant.ScientificName)} />
       </ListItemAvatar>
       <ListItemText
         primary={plant.CommonName}

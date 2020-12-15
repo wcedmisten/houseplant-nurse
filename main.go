@@ -1,8 +1,11 @@
 package main
 
 import (
+	"encoding/csv"
 	"fmt"
 	"net/http"
+	"os"
+	"strconv"
 
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
@@ -40,39 +43,41 @@ func PlantHandler(c *gin.Context) {
 	var a []Plant
 
 	// Open CSV file
-	/*
-		f, err := os.Open("plant_care_data.csv")
-		if err != nil {
-			panic(err)
-		}
-		defer f.Close()
+	f, err := os.Open("plant_care_data.csv")
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
 
-		// Read File into a Variable
-		lines, err := csv.NewReader(f).ReadAll()
+	// Read File into a Variable
+	reader := csv.NewReader(f)
 
-		for _, line := range lines {
-			id, _ := strconv.Atoi(line[0])
-			light, _ := strconv.Atoi(line[3])
-			temperature, _ := strconv.Atoi(line[4])
-			humidity, _ := strconv.Atoi(line[5])
-			watering, _ := strconv.Atoi(line[6])
-			soil, _ := strconv.Atoi(line[7])
+	reader.Read() // skip the CSV header
 
-			a = append(a, Plant{
-				id,
-				line[1],
-				line[2],
-				light,
-				temperature,
-				humidity,
-				watering,
-				soil,
-			})
-		}
-	*/
+	lines, err := reader.ReadAll()
 
-	a = append(a, Plant{0, "Abutilon hybridum", "Flowering Maple", 1, 1, 2, 2, 1})
-	a = append(a, Plant{1, "Acalypha hispida", "Chenile Plant", 1, 2, 2, 2, 1})
+	for _, line := range lines {
+		id, _ := strconv.Atoi(line[0])
+		light, _ := strconv.Atoi(line[3])
+		temperature, _ := strconv.Atoi(line[4])
+		humidity, _ := strconv.Atoi(line[5])
+		watering, _ := strconv.Atoi(line[6])
+		soil, _ := strconv.Atoi(line[7])
+
+		a = append(a, Plant{
+			id,
+			line[1],
+			line[2],
+			light,
+			temperature,
+			humidity,
+			watering,
+			soil,
+		})
+	}
+
+	// a = append(a, Plant{0, "Abutilon hybridum", "Flowering Maple", 1, 1, 2, 2, 1})
+	// a = append(a, Plant{1, "Acalypha hispida", "Chenile Plant", 1, 2, 2, 2, 1})
 	fmt.Print(a)
 
 	c.Header("Content-Type", "application/json")
