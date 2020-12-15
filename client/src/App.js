@@ -27,12 +27,13 @@ function getFileName(scientificName) {
 
 function plantList(plants) {
   return plants.map(plant =>
-    <ListItem key={plant.id}>
+    <ListItem button={true} onClick={() => { alert('clicked') }} key={plant.id}>
       <ListItemAvatar>
-        <Avatar size="large" src={getFileName(plant.ScientificName)} />
+        <Avatar src={getFileName(plant.ScientificName)} />
       </ListItemAvatar>
       <ListItemText
         primary={plant.CommonName}
+        secondary={plant.ScientificName}
       />
     </ListItem>
   );
