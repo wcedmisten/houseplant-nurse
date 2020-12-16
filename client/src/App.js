@@ -14,6 +14,11 @@ function getFileName(scientificName) {
   return `${process.env.PUBLIC_URL}/assets/plant-avatars/${suffix}.jpg`
 }
 
+function getBigFileName(scientificName) {
+  const suffix = scientificName.split('‘')[0].trim().toLowerCase().replace(" ", "-");
+  return `${process.env.PUBLIC_URL}/assets/plant-images/${suffix}.jpg`
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -26,9 +31,7 @@ class App extends Component {
   }
 
   handleClick(Id) {
-    console.log(this.state.plants);
     const clickedPlant = this.state.plants.find(plant => plant.Id === Id);
-    console.log(clickedPlant);
     this.setState({ currentPlant: clickedPlant });
   }
 
@@ -54,8 +57,8 @@ class App extends Component {
     return (
       <div className="App">
         <h1 className="App-h1">Houseplant Nurse 🌱</h1>
-        <Grid container spacing={3}>
-          <Grid item xs={12} sm={6}>
+        <Grid container spacing={1}>
+          <Grid container item xs={12} sm={6}>
             <div className="plantList">
               <FixedSizeList
                 height={800}
@@ -68,10 +71,14 @@ class App extends Component {
             </div>
           </Grid>
           {(this.state.currentPlant != null) &&
-          <Grid item xs={12} sm={6}>
+          <Grid container item xs={12} sm={6}>
             <div className="plantView">
               <p>{this.state.currentPlant.ScientificName} ({this.state.currentPlant.CommonName})</p>
-              <img src={getFileName(this.state.currentPlant.ScientificName)}/>
+              <img src={getBigFileName(this.state.currentPlant.ScientificName)}
+              style={{
+                height: '100%',
+                width: '100%'
+              }}/>
             </div>
           </Grid>
           }
