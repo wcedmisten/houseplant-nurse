@@ -26,12 +26,12 @@ with open("plant_care_data.csv") as plant_csv_file:
     reader = csv.DictReader(plant_csv_file)
     for line in reader:
         name = line['scientific_name']
-        name = name.split('‘')[0].strip().lower().replace(" ", "-")
+        name = name.strip().lower().replace(" ", "-").replace("‘", "(").replace("’", ")")
 
-        filename = name + ".jpg"
+        filename = "client/public/assets/plant-images/" + name + ".jpg"
         print(filename)
-
-        wiki_image = get_wiki_image_url(name)
+        
+        wiki_image = get_wiki_image_url(line['scientific_name'].replace("‘", "").replace("’", ""))
         if wiki_image == 0:
             print("Could not find image for: {}".format(name))
         else:
