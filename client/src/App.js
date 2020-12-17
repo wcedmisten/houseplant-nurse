@@ -10,12 +10,12 @@ import { FixedSizeList } from 'react-window';
 import Grid from '@material-ui/core/Grid';
 
 function getFileName(scientificName) {
-  const suffix = scientificName.split('‘')[0].trim().toLowerCase().replace(" ", "-");
+  const suffix = scientificName.trim().toLowerCase().replace(/ /g,"-").replace("‘", "(").replace("’", ")");
   return `${process.env.PUBLIC_URL}/assets/plant-avatars/${suffix}.jpg`
 }
 
 function getBigFileName(scientificName) {
-  const suffix = scientificName.split('‘')[0].trim().toLowerCase().replace(" ", "-");
+  const suffix = scientificName.trim().toLowerCase().replace(/ /g,"-").replace("‘", "(").replace("’", ")");
   return `${process.env.PUBLIC_URL}/assets/plant-images/${suffix}.jpg`
 }
 
