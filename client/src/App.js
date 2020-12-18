@@ -80,9 +80,10 @@ class App extends Component {
               <p>{this.state.currentPlant.ScientificName} ({this.state.currentPlant.CommonName})</p>
               <img src={getBigFileName(this.state.currentPlant.ScientificName)}
               style={{
-                height: 550,
-                width: '100%',
-                objectFit: 'cover'
+                margin: 'auto',
+                display: 'block',
+                maxWidth: '100%',
+                maxHeight: '100%',
               }}/>
             </div>
           </Grid>

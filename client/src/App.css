@@ -5,12 +5,12 @@
   text-align: center;
 }
 
-.PlantList, .PlantView {
+/* .PlantList, .PlantView {
   align-items: center;
   flex-direction: column;
   justify-content: center;
   display: flex;
-}
+} */
 
 .App-header {
   color: #1d9629;
