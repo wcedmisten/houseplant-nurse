@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/csv"
-	"fmt"
 	"net/http"
 	"os"
 	"strconv"
@@ -75,10 +74,6 @@ func PlantHandler(c *gin.Context) {
 			soil,
 		})
 	}
-
-	// a = append(a, Plant{0, "Abutilon hybridum", "Flowering Maple", 1, 1, 2, 2, 1})
-	// a = append(a, Plant{1, "Acalypha hispida", "Chenile Plant", 1, 2, 2, 2, 1})
-	fmt.Print(a)
 
 	c.Header("Content-Type", "application/json")
 	c.JSON(http.StatusOK, gin.H{

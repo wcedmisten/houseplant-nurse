@@ -56,10 +56,14 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1 className="App-h1">Houseplant Nurse 🌱</h1>
-        <Grid container spacing={1}>
+        <h1 className="App-header">Houseplant Nurse 🌱</h1>
+        <Grid container spacing={1} 
+          direction="row"
+          justify="center"
+          alignItems="center"
+        >
           <Grid container item xs={12} sm={6}>
-            <div className="plantList">
+            <div className="PlantList">
               <FixedSizeList
                 height={800}
                 width={500}
@@ -72,12 +76,13 @@ class App extends Component {
           </Grid>
           {(this.state.currentPlant != null) &&
           <Grid container item xs={12} sm={6}>
-            <div className="plantView">
+            <div className="PlantView">
               <p>{this.state.currentPlant.ScientificName} ({this.state.currentPlant.CommonName})</p>
               <img src={getBigFileName(this.state.currentPlant.ScientificName)}
               style={{
-                height: '100%',
-                width: '100%'
+                height: 550,
+                width: '100%',
+                objectFit: 'cover'
               }}/>
             </div>
           </Grid>
