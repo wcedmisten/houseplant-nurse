@@ -7,6 +7,8 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import { FixedSizeList } from 'react-window';
+import {AutoSizer} from 'react-virtualized'; 
+
 import Grid from '@material-ui/core/Grid';
 
 function getFileName(scientificName) {
@@ -53,40 +55,58 @@ class App extends Component {
             </ListItem>
   }
 
+  plantList() {
+    return (
+      <Grid item xs>
+        <div className="PlantList">
+        <AutoSizer>
+          {({ width, height }) => (
+          <FixedSizeList
+            height={height}
+            width={width}
+            itemSize={80}
+            itemCount={this.state.plants.length}
+          >
+            {this.Row}
+          </FixedSizeList>
+          )}
+          </AutoSizer>
+        </div>
+      </Grid>
+    )
+  }
+
+  plantView() {
+    return (
+      <Grid item xs>
+        <div className="PlantView">
+          <p>{this.state.currentPlant.ScientificName} ({this.state.currentPlant.CommonName})</p>
+          <img src={getBigFileName(this.state.currentPlant.ScientificName)}
+          style={{
+            margin: 'auto',
+            display: 'block',
+            maxWidth: '100%',
+            maxHeight: '100%',
+          }}/>
+        </div>
+      </Grid>
+    )
+  }
+
   render() {
     return (
       <div className="App">
         <h1 className="App-header">Houseplant Nurse 🌱</h1>
-        <Grid container spacing={1} 
+        <Grid container spacing={1}
+          alignItems="stretch"
+          className="Main-Grid"
           direction="row"
           justify="center"
           alignItems="center"
         >
-          <Grid container item xs={12} sm={6}>
-            <div className="PlantList">
-              <FixedSizeList
-                height={800}
-                width={500}
-                itemSize={80}
-                itemCount={this.state.plants.length}
-              >
-                {this.Row}
-              </FixedSizeList>
-            </div>
-          </Grid>
+          {this.plantList()}
           {(this.state.currentPlant != null) &&
-          <Grid container item xs={12} sm={6}>
-            <div className="PlantView">
-              <p>{this.state.currentPlant.ScientificName} ({this.state.currentPlant.CommonName})</p>
-              <img src={getBigFileName(this.state.currentPlant.ScientificName)}
-              style={{
-                margin: 'auto',
-                display: 'block',
-                maxWidth: '100%',
-                maxHeight: '100%',
-              }}/>
-            </div>
-          </Grid>
+            this.plantView()
           }
         </Grid>
       </div>

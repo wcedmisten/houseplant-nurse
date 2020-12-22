@@ -5,12 +5,13 @@
   text-align: center;
 }
 
-/* .PlantList, .PlantView {
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
-  display: flex;
+/* .Main-Grid {
+  min-height: 100%;
 } */
+
+.PlantList, .PlantView {
+  height: 90vh;
+}
 
 .App-header {
   color: #1d9629;
