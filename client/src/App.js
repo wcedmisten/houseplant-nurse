@@ -11,21 +11,25 @@ import Avatar from '@material-ui/core/Avatar';
 import { FixedSizeList } from 'react-window';
 import {AutoSizer} from 'react-virtualized'; 
 
-function getFileName(scientificName) {
+// get the thumbnail image filename for the list view
+function getThumbnailFileName(scientificName) {
   const suffix = scientificName.trim().toLowerCase().replace(/ /g,"-").replace("‘", "(").replace("’", ")");
   return `${process.env.PUBLIC_URL}/assets/plant-avatars/${suffix}.jpg`
 }
 
+// get the full sized image filename for the plant view
 function getBigFileName(scientificName) {
   const suffix = scientificName.trim().toLowerCase().replace(/ /g,"-").replace("‘", "(").replace("’", ")");
   return `${process.env.PUBLIC_URL}/assets/plant-images/${suffix}.jpg`
 }
 
+// render the full name of the plant with common and scientific names
 function getFullName(scientificName, commonName) {
-  return <h2>{commonName} (<i>{scientificName}</i>)</h2>
+  return <h2 className="PlantViewTitle">{commonName} (<i>{scientificName}</i>)</h2>
 }
 
-function getLight(lightID) {
+// get a description of the light level
+function getLightDescription(lightID) {
   switch (lightID) {
     case "1":
       return <p>Sunny light areas: At least 4 hours of direct sun</p>
@@ -55,6 +59,7 @@ class App extends Component {
     this.Row = this.Row.bind(this);
   }
 
+  // when an item in the list has been clicked, set the state to indicate we want to show it
   handleClick(Id) {
     const clickedPlant = this.state.plants.find(plant => plant.Id === Id);
     this.setState({ currentPlant: clickedPlant });
@@ -69,7 +74,7 @@ class App extends Component {
 
     return <ListItem style={data.style} button={true} onClick={() => this.handleClick(plant.Id)} key={plant.id}>
               <ListItemAvatar>
-                <Avatar src={getFileName(plant.ScientificName)} />
+                <Avatar src={getThumbnailFileName(plant.ScientificName)} />
               </ListItemAvatar>
               <ListItemText
                 primary={plant.CommonName}
@@ -78,6 +83,7 @@ class App extends Component {
             </ListItem>
   }
 
+  // view for showing a list of plants in the catalog
   plantList() {
     return (
       <Grid item xs>
@@ -99,6 +105,7 @@ class App extends Component {
     )
   }
 
+  // view for describing the plant and showing a large image of it
   plantView() {
     const plant = this.state.currentPlant;
 
@@ -106,8 +113,8 @@ class App extends Component {
       <Grid item xs>
         <div className="PlantView">
           {getFullName(plant.ScientificName, plant.CommonName)}
-          {getLight(plant.Light)}
           <img className="PlantViewImage" src={getBigFileName(plant.ScientificName)}/>
+          {getLightDescription(plant.Light)}
         </div>
       </Grid>
     )
@@ -134,6 +141,7 @@ class App extends Component {
     );
   }
 
+  // before the page finishes loading, retrieve all of the plant data (but not images)
   componentDidMount() {
     fetch(`${process.env.PUBLIC_URL}/api/plants`)
         .then(res => res.json())

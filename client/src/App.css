@@ -6,9 +6,14 @@
   padding: 8;
 }
 
-/* .Main-Grid {
-  min-height: 100%;
-} */
+.App-header {
+  color: #1d9629;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+}
+
 
 .PlantList, .PlantView {
   height: 90vh;
@@ -21,10 +26,7 @@
   max-height: '100%';
 }
 
-.App-header {
+.PlantViewTitle {
   color: #1d9629;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  font-size: x-large;
 }
