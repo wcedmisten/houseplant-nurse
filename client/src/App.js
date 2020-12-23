@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import './App.css';
 
-import List from '@material-ui/core/List';
+import Grid from '@material-ui/core/Grid';
+
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
+
 import { FixedSizeList } from 'react-window';
 import {AutoSizer} from 'react-virtualized'; 
-
-import Grid from '@material-ui/core/Grid';
 
 function getFileName(scientificName) {
   const suffix = scientificName.trim().toLowerCase().replace(/ /g,"-").replace("‘", "(").replace("’", ")");
@@ -19,6 +19,29 @@ function getFileName(scientificName) {
 function getBigFileName(scientificName) {
   const suffix = scientificName.trim().toLowerCase().replace(/ /g,"-").replace("‘", "(").replace("’", ")");
   return `${process.env.PUBLIC_URL}/assets/plant-images/${suffix}.jpg`
+}
+
+function getFullName(scientificName, commonName) {
+  return <h2>{commonName} (<i>{scientificName}</i>)</h2>
+}
+
+function getLight(lightID) {
+  switch (lightID) {
+    case "1":
+      return <p>Sunny light areas: At least 4 hours of direct sun</p>
+    case "1-2":
+      return <p>Sunny-high light areas: Over 200 ft-c with some direct sunlight.</p>
+    case "2":
+      return <p>High-light areas: Over 200 ft-c, but not direct sun</p>
+    case "2-3":
+      return <p>Medium-high light areas: 150-250 ft-c, but not direct sun</p>
+    case "3":
+      return <p>Medium-light areas: 75 ft-c to 200 ft-c</p>
+    case "3-4":
+      return <p>Low-medium light areas: 50-150 ft-c</p>
+    case "4":
+      return <p>Low-light areas: 25 ft-c to 75 ft-c</p>
+  }
 }
 
 class App extends Component {
@@ -77,17 +100,14 @@ class App extends Component {
   }
 
   plantView() {
+    const plant = this.state.currentPlant;
+
     return (
       <Grid item xs>
         <div className="PlantView">
-          <p>{this.state.currentPlant.ScientificName} ({this.state.currentPlant.CommonName})</p>
-          <img src={getBigFileName(this.state.currentPlant.ScientificName)}
-          style={{
-            margin: 'auto',
-            display: 'block',
-            maxWidth: '100%',
-            maxHeight: '100%',
-          }}/>
+          {getFullName(plant.ScientificName, plant.CommonName)}
+          {getLight(plant.Light)}
+          <img className="PlantViewImage" src={getBigFileName(plant.ScientificName)}/>
         </div>
       </Grid>
     )
@@ -97,7 +117,8 @@ class App extends Component {
     return (
       <div className="App">
         <h1 className="App-header">Houseplant Nurse 🌱</h1>
-        <Grid container spacing={1}
+        <Grid container spacing={4}
+          
           alignItems="stretch"
           className="Main-Grid"
           direction="row"

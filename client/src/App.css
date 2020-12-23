@@ -3,6 +3,7 @@
 
 .App {
   text-align: center;
+  padding: 8;
 }
 
 /* .Main-Grid {
@@ -11,6 +12,13 @@
 
 .PlantList, .PlantView {
   height: 90vh;
+}
+
+.PlantViewImage {
+  margin: 'auto';
+  display: 'block';
+  max-width: '100%';
+  max-height: '100%';
 }
 
 .App-header {

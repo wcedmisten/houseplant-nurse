@@ -31,11 +31,11 @@ type Plant struct {
 	Id             int
 	ScientificName string
 	CommonName     string
-	Light          int
-	Temperature    int
-	Humidity       int
-	Watering       int
-	Soil           int
+	Light          string
+	Temperature    string
+	Humidity       string
+	Watering       string
+	Soil           string
 }
 
 func PlantHandler(c *gin.Context) {
@@ -57,21 +57,16 @@ func PlantHandler(c *gin.Context) {
 
 	for _, line := range lines {
 		id, _ := strconv.Atoi(line[0])
-		light, _ := strconv.Atoi(line[3])
-		temperature, _ := strconv.Atoi(line[4])
-		humidity, _ := strconv.Atoi(line[5])
-		watering, _ := strconv.Atoi(line[6])
-		soil, _ := strconv.Atoi(line[7])
 
 		a = append(a, Plant{
 			id,
 			line[1],
 			line[2],
-			light,
-			temperature,
-			humidity,
-			watering,
-			soil,
+			line[3],
+			line[4],
+			line[5],
+			line[6],
+			line[7],
 		})
 	}
 
