@@ -8,6 +8,14 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
+
 import { FixedSizeList } from 'react-window';
 import {AutoSizer} from 'react-virtualized'; 
 
@@ -55,10 +63,64 @@ function getTemperatureDescription(temperatureLevel) {
   switch (temperatureLevel) {
     case "1":
       return "Cool: 50°F night, 65°F day temperatures";
+    case "1-2":
+      return "Cool-Average: 50-65°F night, 65-75°F day temperatures"
     case "2":
       return "Average: 65°F night, 75°F day temperatures"
+    case "2-3":
+      return "Average-Warm: 65-70°F night, 75-85°F day temperatures"
     case "3":
       return "Warm: 70°F night, 85°F day temperatures"
+  }
+}
+
+// get a description of humidity
+function getHumidityDescription(humidityLevel) {
+  switch (humidityLevel) {
+    case "1":
+      return "High: 50% or higher 🌫️🌫️🌫️";
+    case "1-2":
+      return "Average-High: 25%-50% or higher 🌫️🌫️";
+    case "2":
+      return "Average: 25% to 49% 🌫️🌫";
+    case "2-3":
+      return "Low-Average: 5%-49% 🌫️";
+    case "3":
+      return "Low: 5% to 24% 🌫️";
+  }
+}
+
+function getWaterDescription(waterLevel) {
+  switch (waterLevel) {
+    case "1":
+      return "Keep soil mix moist";
+    case "1-2":
+      return "Surface of soil mix should only slightly dry before re-watering";
+    case "2":
+      return "Surface of soil mix should dry before re-watering";
+    case "2-3":
+      return "Deeper soil can become slightly dry before re-watering";
+    case "3":
+      return "Deeper soil should become moderately dry before re-watering";
+  }
+}
+
+function getSoilDescription(soilType) {
+  switch (soilType) {
+    case "1":
+      return "Flowering house plants";
+    case "2":
+      return "Foliage plants";
+    case "3":
+      return "Bromeliads";
+    case "4":
+      return "Orchids";
+    case "5":
+      return "Succulents and cacti";
+    case "6":
+      return "Ferns";
+    case "7":
+      return "African violets and other Gesneriads";
   }
 }
 
@@ -124,13 +186,34 @@ class App extends Component {
   plantView() {
     const plant = this.state.currentPlant;
 
+    const rows = [
+      {name: "Light", description: getLightDescription(plant.Light)},
+      {name: "Temperature", description: getTemperatureDescription(plant.Temperature)},
+      {name: "Humidity", description: getHumidityDescription(plant.Humidity)},
+      {name: "Watering", description: getWaterDescription(plant.Watering)},
+      {name: "Soil", description: getSoilDescription(plant.Soil)}
+    ];
+
     return (
       <Grid item xs>
         <div className="PlantView">
           {getFullName(plant.ScientificName, plant.CommonName)}
           <img className="PlantViewImage" src={getBigFileName(plant.ScientificName)}/>
-          <p><b>Light:</b> {getLightDescription(plant.Light)}</p>
-          <p><b>Temperature:</b> {getTemperatureDescription(plant.Temperature)}</p>
+
+          <TableContainer component={Paper}>
+            <Table className="plantDescriptionTable" aria-label="simple table">
+              <TableBody>
+              {rows.map((row) => (
+                <TableRow key={row.name}>
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="right">{row.description}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
         </div>
       </Grid>
     )
