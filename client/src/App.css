@@ -15,8 +15,8 @@
   font-size: calc(10px + 2vmin);
 }
 
-
-.PlantList, .PlantView {
+.PlantList,
+.PlantView {
   height: 90vh;
 }
 

@@ -1,38 +1,52 @@
-import React, {Component} from 'react';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
 
-import Grid from '@material-ui/core/Grid';
+import Grid from "@material-ui/core/Grid";
 
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
+import ListItem from "@material-ui/core/ListItem";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemText from "@material-ui/core/ListItemText";
+import Avatar from "@material-ui/core/Avatar";
 
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 
-import { FixedSizeList } from 'react-window';
-import {AutoSizer} from 'react-virtualized'; 
+import { FixedSizeList } from "react-window";
+import { AutoSizer } from "react-virtualized";
 
 // get the thumbnail image filename for the list view
 function getThumbnailFileName(scientificName) {
-  const suffix = scientificName.trim().toLowerCase().replace(/ /g,"-").replace("‘", "(").replace("’", ")");
-  return `${process.env.PUBLIC_URL}/assets/plant-avatars/${suffix}.jpg`
+  const suffix = scientificName
+    .trim()
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace("‘", "(")
+    .replace("’", ")");
+  return `${process.env.PUBLIC_URL}/assets/plant-avatars/${suffix}.jpg`;
 }
 
 // get the full sized image filename for the plant view
 function getBigFileName(scientificName) {
-  const suffix = scientificName.trim().toLowerCase().replace(/ /g,"-").replace("‘", "(").replace("’", ")");
-  return `${process.env.PUBLIC_URL}/assets/plant-images/${suffix}.jpg`
+  const suffix = scientificName
+    .trim()
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace("‘", "(")
+    .replace("’", ")");
+  return `${process.env.PUBLIC_URL}/assets/plant-images/${suffix}.jpg`;
 }
 
 // render the full name of the plant with common and scientific names
 function getFullName(scientificName, commonName) {
-  return <h2 className="PlantViewTitle">{commonName} (<i>{scientificName}</i>)</h2>
+  return (
+    <h2 className="PlantViewTitle">
+      {commonName} (<i>{scientificName}</i>)
+    </h2>
+  );
 }
 
 // get a description of the light level
@@ -63,13 +77,13 @@ function getTemperatureDescription(temperatureLevel) {
     case "1":
       return "Cool: 50°F night, 65°F day temperatures";
     case "1-2":
-      return "Cool-Average: 50-65°F night, 65-75°F day temperatures"
+      return "Cool-Average: 50-65°F night, 65-75°F day temperatures";
     case "2":
-      return "Average: 65°F night, 75°F day temperatures"
+      return "Average: 65°F night, 75°F day temperatures";
     case "2-3":
-      return "Average-Warm: 65-70°F night, 75-85°F day temperatures"
+      return "Average-Warm: 65-70°F night, 75-85°F day temperatures";
     case "3":
-      return "Warm: 70°F night, 85°F day temperatures"
+      return "Warm: 70°F night, 85°F day temperatures";
   }
 }
 
@@ -123,13 +137,12 @@ function getSoilDescription(soilType) {
   }
 }
 
-
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
       plants: [],
-      currentPlant: null
+      currentPlant: null,
     };
 
     this.Row = this.Row.bind(this);
@@ -137,26 +150,33 @@ class App extends Component {
 
   // when an item in the list has been clicked, set the state to indicate we want to show it
   handleClick(Id) {
-    const clickedPlant = this.state.plants.find(plant => plant.Id === Id);
+    const clickedPlant = this.state.plants.find((plant) => plant.Id === Id);
     this.setState({ currentPlant: clickedPlant });
   }
 
-  Row (data) {
+  Row(data) {
     if (this.state.plants.length === 0) {
       return false;
     }
 
     const plant = this.state.plants[data.index];
 
-    return <ListItem style={data.style} button={true} onClick={() => this.handleClick(plant.Id)} key={plant.id}>
-              <ListItemAvatar>
-                <Avatar src={getThumbnailFileName(plant.ScientificName)} />
-              </ListItemAvatar>
-              <ListItemText
-                primary={plant.CommonName}
-                secondary={plant.ScientificName}
-              />
-            </ListItem>
+    return (
+      <ListItem
+        style={data.style}
+        button={true}
+        onClick={() => this.handleClick(plant.Id)}
+        key={plant.id}
+      >
+        <ListItemAvatar>
+          <Avatar src={getThumbnailFileName(plant.ScientificName)} />
+        </ListItemAvatar>
+        <ListItemText
+          primary={plant.CommonName}
+          secondary={plant.ScientificName}
+        />
+      </ListItem>
+    );
   }
 
   // view for showing a list of plants in the catalog
@@ -164,21 +184,21 @@ class App extends Component {
     return (
       <Grid item xs>
         <div className="PlantList">
-        <AutoSizer>
-          {({ width, height }) => (
-          <FixedSizeList
-            height={height}
-            width={width}
-            itemSize={80}
-            itemCount={this.state.plants.length}
-          >
-            {this.Row}
-          </FixedSizeList>
-          )}
+          <AutoSizer>
+            {({ width, height }) => (
+              <FixedSizeList
+                height={height}
+                width={width}
+                itemSize={80}
+                itemCount={this.state.plants.length}
+              >
+                {this.Row}
+              </FixedSizeList>
+            )}
           </AutoSizer>
         </div>
       </Grid>
-    )
+    );
   }
 
   // view for describing the plant and showing a large image of it
@@ -186,44 +206,51 @@ class App extends Component {
     const plant = this.state.currentPlant;
 
     const rows = [
-      {name: "Light", description: getLightDescription(plant.Light)},
-      {name: "Temperature", description: getTemperatureDescription(plant.Temperature)},
-      {name: "Humidity", description: getHumidityDescription(plant.Humidity)},
-      {name: "Watering", description: getWaterDescription(plant.Watering)},
-      {name: "Soil", description: getSoilDescription(plant.Soil)}
+      { name: "Light", description: getLightDescription(plant.Light) },
+      {
+        name: "Temperature",
+        description: getTemperatureDescription(plant.Temperature),
+      },
+      { name: "Humidity", description: getHumidityDescription(plant.Humidity) },
+      { name: "Watering", description: getWaterDescription(plant.Watering) },
+      { name: "Soil", description: getSoilDescription(plant.Soil) },
     ];
 
     return (
       <Grid item xs>
         <div className="PlantView">
           {getFullName(plant.ScientificName, plant.CommonName)}
-          <img className="PlantViewImage" src={getBigFileName(plant.ScientificName)}/>
+          <img
+            className="PlantViewImage"
+            src={getBigFileName(plant.ScientificName)}
+          />
 
           <TableContainer component={Paper}>
             <Table className="plantDescriptionTable" aria-label="simple table">
               <TableBody>
-              {rows.map((row) => (
-                <TableRow key={row.name}>
-                  <TableCell component="th" scope="row">
-                    <b>{row.name}</b>
-                  </TableCell>
-                  <TableCell align="right">{row.description}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                {rows.map((row) => (
+                  <TableRow key={row.name}>
+                    <TableCell component="th" scope="row">
+                      <b>{row.name}</b>
+                    </TableCell>
+                    <TableCell align="right">{row.description}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </div>
       </Grid>
-    )
+    );
   }
 
   render() {
     return (
       <div className="App">
         <h1 className="App-header">Houseplant Nurse 🌱</h1>
-        <Grid container spacing={4}
-          
+        <Grid
+          container
+          spacing={4}
           alignItems="stretch"
           className="Main-Grid"
           direction="row"
@@ -231,9 +258,7 @@ class App extends Component {
           alignItems="center"
         >
           {this.plantList()}
-          {(this.state.currentPlant != null) &&
-            this.plantView()
-          }
+          {this.state.currentPlant != null && this.plantView()}
         </Grid>
       </div>
     );
@@ -242,11 +267,11 @@ class App extends Component {
   // before the page finishes loading, retrieve all of the plant data (but not images)
   componentDidMount() {
     fetch(`${process.env.PUBLIC_URL}/api/plants`)
-        .then(res => res.json())
-        .then((data) => {
-          this.setState({ plants: data.plants })
-        })
-        .catch(console.log)
+      .then((res) => res.json())
+      .then((data) => {
+        this.setState({ plants: data.plants });
+      })
+      .catch(console.log);
   }
 }
 
