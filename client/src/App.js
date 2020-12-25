@@ -12,7 +12,6 @@ import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
@@ -78,15 +77,15 @@ function getTemperatureDescription(temperatureLevel) {
 function getHumidityDescription(humidityLevel) {
   switch (humidityLevel) {
     case "1":
-      return "High: 50% or higher 🌫️🌫️🌫️";
+      return "High: 50% or higher";
     case "1-2":
-      return "Average-High: 25%-50% or higher 🌫️🌫️";
+      return "Average-High: 25%-50% or higher";
     case "2":
-      return "Average: 25% to 49% 🌫️🌫";
+      return "Average: 25% to 49%";
     case "2-3":
-      return "Low-Average: 5%-49% 🌫️";
+      return "Low-Average: 5%-49%";
     case "3":
-      return "Low: 5% to 24% 🌫️";
+      return "Low: 5% to 24%";
   }
 }
 
@@ -206,7 +205,7 @@ class App extends Component {
               {rows.map((row) => (
                 <TableRow key={row.name}>
                   <TableCell component="th" scope="row">
-                    {row.name}
+                    <b>{row.name}</b>
                   </TableCell>
                   <TableCell align="right">{row.description}</TableCell>
                 </TableRow>
