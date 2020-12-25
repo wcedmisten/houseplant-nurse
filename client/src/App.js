@@ -29,24 +29,39 @@ function getFullName(scientificName, commonName) {
 }
 
 // get a description of the light level
-function getLightDescription(lightID) {
-  switch (lightID) {
+function getLightDescription(lightLevel) {
+  switch (lightLevel) {
     case "1":
-      return <p>Sunny light areas: At least 4 hours of direct sun</p>
+      return "Sunny light areas: At least 4 hours of direct sun";
     case "1-2":
-      return <p>Sunny-high light areas: Over 200 ft-c with some direct sunlight.</p>
+      return "Sunny-high light areas: Over 200 ft-c with some direct sunlight.";
     case "2":
-      return <p>High-light areas: Over 200 ft-c, but not direct sun</p>
+      return "High-light areas: Over 200 ft-c, but not direct sun";
     case "2-3":
-      return <p>Medium-high light areas: 150-250 ft-c, but not direct sun</p>
+      return "Medium-high light areas: 150-250 ft-c, but not direct sun";
+    case "2-3":
+      return "Low-high light areas: 25-250 ft-c, but not direct sun";
     case "3":
-      return <p>Medium-light areas: 75 ft-c to 200 ft-c</p>
+      return "Medium-light areas: 75 ft-c to 200 ft-c";
     case "3-4":
-      return <p>Low-medium light areas: 50-150 ft-c</p>
+      return "Low-medium light areas: 50-150 ft-c";
     case "4":
-      return <p>Low-light areas: 25 ft-c to 75 ft-c</p>
+      return "Low-light areas: 25 ft-c to 75 ft-c";
   }
 }
+
+// get a description of the temperature
+function getTemperatureDescription(temperatureLevel) {
+  switch (temperatureLevel) {
+    case "1":
+      return "Cool: 50°F night, 65°F day temperatures";
+    case "2":
+      return "Average: 65°F night, 75°F day temperatures"
+    case "3":
+      return "Warm: 70°F night, 85°F day temperatures"
+  }
+}
+
 
 class App extends Component {
   constructor(props) {
@@ -114,7 +129,8 @@ class App extends Component {
         <div className="PlantView">
           {getFullName(plant.ScientificName, plant.CommonName)}
           <img className="PlantViewImage" src={getBigFileName(plant.ScientificName)}/>
-          {getLightDescription(plant.Light)}
+          <p><b>Light:</b> {getLightDescription(plant.Light)}</p>
+          <p><b>Temperature:</b> {getTemperatureDescription(plant.Temperature)}</p>
         </div>
       </Grid>
     )
