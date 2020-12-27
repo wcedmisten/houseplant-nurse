@@ -2,9 +2,7 @@ package main
 
 import (
 	"encoding/csv"
-	"fmt"
 	"log"
-	"math"
 	"net/http"
 	"os"
 	"strconv"
@@ -15,8 +13,18 @@ import (
 	"github.com/rwcarlsen/goexif/exif"
 )
 
+func getFootCandlesFromImage(filename string) float64 {
+	ISOVal, FNumberFloat, ExposureTimeFloat := getEXIFData(filename)
+
+	// luminance approximation formula found: https://www.conservationphysics.org/lightmtr/luxmtr1.html
+	lux := 50 * FNumberFloat * FNumberFloat / (ExposureTimeFloat * float64(ISOVal))
+
+	// convert lux to foot-candles
+	return lux / 10.76
+}
+
 // returns the ISO value and the EVFloat from the EXIF metadata
-func getEXIFData(filename string) (int, float64) {
+func getEXIFData(filename string) (int, float64, float64) {
 	f, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
@@ -27,28 +35,23 @@ func getEXIFData(filename string) (int, float64) {
 		log.Fatal(err)
 	}
 
-	fmt.Printf(x.String())
+	// fmt.Println(x.String())
 
 	ISO, _ := x.Get(exif.ISOSpeedRatings)
 	ISOVal, _ := ISO.Int(0)
 
-	EV, _ := x.Get(exif.ApertureValue)
-	num, den, _ := EV.Rat2(0)
+	FNumber, _ := x.Get(exif.FNumber)
+	num, den, _ := FNumber.Rat2(0)
 
-	EVFloat := float64(num) / float64(den)
-	return ISOVal, EVFloat
-}
+	FNumberFloat := float64(num) / float64(den)
+	// FNumber
+	// ExposureTime
 
-// get the equivalent Exposure Value for ISO 100, given ISO value `ISO` and Exposure Value `EV`
-// https://en.wikipedia.org/wiki/Exposure_value#Tabulated_exposure_values
-func getEV100(ISO float64, EV float64) float64 {
-	return EV - math.Log2(ISO/100.0)
-}
+	ExposureTime, _ := x.Get(exif.ExposureTime)
+	num, den, _ = ExposureTime.Rat2(0)
 
-// approximate the luminance from the Exposure Value equivalent given an ISO 100
-// https://en.wikipedia.org/wiki/Exposure_value#EV_as_a_measure_of_luminance_and_illuminance
-func getLuxLuminance(EV100 float64) float64 {
-	return 2.5 * math.Exp2(EV100)
+	ExposureTimeFloat := float64(num) / float64(den)
+	return ISOVal, FNumberFloat, ExposureTimeFloat
 }
 
 func main() {

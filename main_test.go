@@ -5,43 +5,23 @@ import (
 	"testing"
 )
 
-func TestGetLuxLuminance(t *testing.T) {
-	var luxVals = map[float64]float64{
-		-1.0: 1.25,
-		0.0:  2.5,
-		1.0:  5.0,
-		5.0:  80.0,
-		10.0: 2560.0,
-	}
-
-	for k, v := range luxVals {
-		lux := getLuxLuminance(k)
-		if lux != v {
-			t.Error(fmt.Sprintf("Expected %f but got %f", v, lux)) // to indicate test failed
-		}
-	}
-}
-
-func TestGetEV100(t *testing.T) {
-	EV100from200 := getEV100(200.0, 9.0)
-	if EV100from200 != 8.0 {
-		t.Error(fmt.Sprintf("Expected adjusted EV of %f but got %f", 8.0, EV100from200))
-	}
-
-	EV100from400 := getEV100(400.0, 3.0)
-	if EV100from400 != 1.0 {
-		t.Error(fmt.Sprintf("Expected adjusted EV of %f but got %f", 8.0, EV100from400))
-	}
-}
-
 func TestExifData(t *testing.T) {
-	ISO, EV := getEXIFData("/home/wce/Downloads/IMG_20201225_204432.jpg")
+	ISOVal, FNumberFloat, ExposureTimeFloat := getEXIFData("/home/wce/Downloads/IMG_20201225_204432.jpg")
+	// ISOVal, FNumberFloat, ExposureTimeFloat := getEXIFData("/home/wce/Downloads/IMG_20200510_151630.jpg")
 
-	if ISO != 1250 {
-		t.Error(fmt.Sprintf("Expected ISO of %d but got %d", 1250, ISO))
+	if ISOVal != 1250 {
+		t.Error(fmt.Sprintf("Expected ISO of %d but got %d", 1250, ISOVal))
 	}
 
-	if EV != 1.53 {
-		t.Error(fmt.Sprintf("Expected EV of %f but got %f", 1.53, EV))
+	if FNumberFloat != 1.7 {
+		t.Error(fmt.Sprintf("Expected EV of %f but got %f", 1.7, FNumberFloat))
 	}
+
+	if ExposureTimeFloat != .02 {
+		t.Error(fmt.Sprintf("Expected EV of %f but got %f", .02, ExposureTimeFloat))
+	}
+}
+
+func TestFootCandles(t *testing.T) {
+	fmt.Println(getFootCandlesFromImage("/home/wce/Downloads/IMG_20200510_151630.jpg"))
 }
