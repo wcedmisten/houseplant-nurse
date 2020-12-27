@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/csv"
+	"math"
 	"net/http"
 	"os"
 	"strconv"
@@ -9,6 +10,18 @@ import (
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 )
+
+// get the equivalent Exposure Value for ISO 100, given ISO value `ISO` and Exposure Value `EV`
+// https://en.wikipedia.org/wiki/Exposure_value#Tabulated_exposure_values
+func getEV100(ISO float64, EV float64) float64 {
+	return EV - math.Log2(ISO/100.0)
+}
+
+// approximate the luminance from the Exposure Value equivalent given an ISO 100
+// https://en.wikipedia.org/wiki/Exposure_value#EV_as_a_measure_of_luminance_and_illuminance
+func getLuxLuminance(EV100 float64) float64 {
+	return 2.5 * math.Exp2(EV100)
+}
 
 func main() {
 	// Set the router as the default one shipped with Gin
