@@ -33,3 +33,15 @@ func TestGetEV100(t *testing.T) {
 		t.Error(fmt.Sprintf("Expected adjusted EV of %f but got %f", 8.0, EV100from400))
 	}
 }
+
+func TestExifData(t *testing.T) {
+	ISO, EV := getEXIFData("/home/wce/Downloads/IMG_20201225_204432.jpg")
+
+	if ISO != 1250 {
+		t.Error(fmt.Sprintf("Expected ISO of %d but got %d", 1250, ISO))
+	}
+
+	if EV != 1.53 {
+		t.Error(fmt.Sprintf("Expected EV of %f but got %f", 1.53, EV))
+	}
+}

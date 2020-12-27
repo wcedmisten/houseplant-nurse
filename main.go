@@ -2,6 +2,8 @@ package main
 
 import (
 	"encoding/csv"
+	"fmt"
+	"log"
 	"math"
 	"net/http"
 	"os"
@@ -9,7 +11,33 @@ import (
 
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
+
+	"github.com/rwcarlsen/goexif/exif"
 )
+
+// returns the ISO value and the EVFloat from the EXIF metadata
+func getEXIFData(filename string) (int, float64) {
+	f, err := os.Open(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	x, err := exif.Decode(f)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf(x.String())
+
+	ISO, _ := x.Get(exif.ISOSpeedRatings)
+	ISOVal, _ := ISO.Int(0)
+
+	EV, _ := x.Get(exif.ApertureValue)
+	num, den, _ := EV.Rat2(0)
+
+	EVFloat := float64(num) / float64(den)
+	return ISOVal, EVFloat
+}
 
 // get the equivalent Exposure Value for ISO 100, given ISO value `ISO` and Exposure Value `EV`
 // https://en.wikipedia.org/wiki/Exposure_value#Tabulated_exposure_values
