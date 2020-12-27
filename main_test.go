@@ -14,14 +14,14 @@ func TestExifData(t *testing.T) {
 	}
 
 	if FNumberFloat != 1.7 {
-		t.Error(fmt.Sprintf("Expected EV of %f but got %f", 1.7, FNumberFloat))
+		t.Error(fmt.Sprintf("Expected F number of %f but got %f", 1.7, FNumberFloat))
 	}
 
 	if ExposureTimeFloat != .02 {
-		t.Error(fmt.Sprintf("Expected EV of %f but got %f", .02, ExposureTimeFloat))
+		t.Error(fmt.Sprintf("Expected exposure time of %f but got %f", .02, ExposureTimeFloat))
 	}
 }
 
 func TestFootCandles(t *testing.T) {
-	fmt.Println(getFootCandlesFromImage("/home/wce/Downloads/IMG_20200510_151630.jpg"))
+	fmt.Println(getFootCandlesFromImage("/home/wce/Downloads/IMG_20200429_130423.jpg"))
 }
