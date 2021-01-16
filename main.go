@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
@@ -35,8 +36,6 @@ func getEXIFData(filename string) (int, float64, float64) {
 		log.Fatal(err)
 	}
 
-	// fmt.Println(x.String())
-
 	ISO, _ := x.Get(exif.ISOSpeedRatings)
 	ISOVal, _ := ISO.Int(0)
 
@@ -65,6 +64,8 @@ func main() {
 	api := router.Group("/api")
 
 	api.GET("/plants", PlantHandler)
+
+	api.GET("/search", SearchHandler)
 
 	// Start and run the server
 	router.Run(":5000")
@@ -112,6 +113,57 @@ func PlantHandler(c *gin.Context) {
 			line[6],
 			line[7],
 		})
+	}
+
+	c.Header("Content-Type", "application/json")
+	c.JSON(http.StatusOK, gin.H{
+		"plants": a,
+	})
+}
+
+func SearchHandler(c *gin.Context) {
+	var a []Plant
+
+	// Open CSV file
+	f, err := os.Open("plant_care_data.csv")
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	searchName := c.Query("name") // shortcut for c.Request.URL.Query().Get("name")
+
+	// Read File into a Variable
+	reader := csv.NewReader(f)
+
+	reader.Read() // skip the CSV header
+
+	lines, err := reader.ReadAll()
+
+	for _, line := range lines {
+		id, _ := strconv.Atoi(line[0])
+
+		commonName := line[1]
+		scientificName := line[2]
+
+		if len(searchName) == 0 ||
+			strings.Contains(strings.ToLower(commonName), strings.ToLower(searchName)) ||
+			strings.Contains(strings.ToLower(scientificName), strings.ToLower(searchName)) {
+			a = append(a, Plant{
+				id,
+				line[1],
+				line[2],
+				line[3],
+				line[4],
+				line[5],
+				line[6],
+				line[7],
+			})
+		}
+	}
+
+	if a == nil {
+		a = make([]Plant, 0)
 	}
 
 	c.Header("Content-Type", "application/json")

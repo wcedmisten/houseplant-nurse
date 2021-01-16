@@ -143,9 +143,12 @@ class App extends Component {
     this.state = {
       plants: [],
       currentPlant: null,
+      searchVal: null,
     };
 
     this.Row = this.Row.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   // when an item in the list has been clicked, set the state to indicate we want to show it
@@ -179,10 +182,34 @@ class App extends Component {
     );
   }
 
+  handleChange(event) {
+    this.setState({searchVal: event.target.value});
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+
+    fetch(`${process.env.PUBLIC_URL}/api/search?name=${this.state.searchVal}`)
+      .then((res) => res.json())
+      .then((data) => {
+        this.setState({ plants: data.plants });
+      })
+      .catch(console.log);
+  }
+
+
   // view for showing a list of plants in the catalog
   plantList() {
     return (
       <Grid item xs>
+        <div className="Search">
+          <form onSubmit={this.handleSubmit}>
+          <label>
+            <input type="text" value={this.state.searchVal} onChange={this.handleChange} />
+          </label>
+          <input type="submit" value="Search" />
+        </form>
+        </div>
         <div className="PlantList">
           <AutoSizer>
             {({ width, height }) => (

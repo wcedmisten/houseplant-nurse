@@ -6,7 +6,7 @@ import (
 )
 
 func TestExifData(t *testing.T) {
-	ISOVal, FNumberFloat, ExposureTimeFloat := getEXIFData("/home/wce/Downloads/IMG_20201225_204432.jpg")
+	ISOVal, FNumberFloat, ExposureTimeFloat := getEXIFData("/home/wedmisten/Downloads/IMG_20201225_204432.jpg")
 	// ISOVal, FNumberFloat, ExposureTimeFloat := getEXIFData("/home/wce/Downloads/IMG_20200510_151630.jpg")
 
 	if ISOVal != 1250 {
@@ -23,5 +23,5 @@ func TestExifData(t *testing.T) {
 }
 
 func TestFootCandles(t *testing.T) {
-	fmt.Println(getFootCandlesFromImage("/home/wce/Downloads/IMG_20200429_130423.jpg"))
+	fmt.Println(getFootCandlesFromImage("/home/wedmisten/Downloads/IMG_20200429_130423.jpg"))
 }
