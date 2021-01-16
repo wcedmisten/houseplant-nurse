@@ -53,7 +53,7 @@ func getEXIFData(filename string) (int, float64, float64) {
 	return ISOVal, FNumberFloat, ExposureTimeFloat
 }
 
-func main() {
+func setUpRouter() *gin.Engine {
 	// Set the router as the default one shipped with Gin
 	router := gin.Default()
 
@@ -68,6 +68,12 @@ func main() {
 	api.GET("/search", SearchHandler)
 
 	// Start and run the server
+	return router
+}
+
+func main() {
+	router := setUpRouter()
+
 	router.Run(":5000")
 }
 
@@ -162,6 +168,7 @@ func SearchHandler(c *gin.Context) {
 		}
 	}
 
+	// return an empty list if no matches exist
 	if a == nil {
 		a = make([]Plant, 0)
 	}
