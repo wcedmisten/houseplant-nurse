@@ -29,3 +29,7 @@
   color: #1d9629;
   font-size: x-large;
 }
+
+.PlantViewPropertyIcon {
+  max-height: 50px;
+}

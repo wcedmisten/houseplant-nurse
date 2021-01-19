@@ -60,7 +60,7 @@ function getLightDescription(lightLevel) {
       return "High-light areas: Over 200 ft-c, but not direct sun";
     case "2-3":
       return "Medium-high light areas: 150-250 ft-c, but not direct sun";
-    case "2-3":
+    case "2-4":
       return "Low-high light areas: 25-250 ft-c, but not direct sun";
     case "3":
       return "Medium-light areas: 75 ft-c to 200 ft-c";
@@ -69,6 +69,11 @@ function getLightDescription(lightLevel) {
     case "4":
       return "Low-light areas: 25 ft-c to 75 ft-c";
   }
+}
+
+function getLightIcon(lightLevel) {
+  const filename = lightLevel.replace("-", "")
+  return `${process.env.PUBLIC_URL}/assets/icons/sun${filename}.png`
 }
 
 // get a description of the temperature
@@ -87,6 +92,11 @@ function getTemperatureDescription(temperatureLevel) {
   }
 }
 
+function getTemperatureIcon(temperatureLevel) {
+  const filename = temperatureLevel.replace("-", "")
+  return `${process.env.PUBLIC_URL}/assets/icons/temperature${filename}.png`
+}
+
 // get a description of humidity
 function getHumidityDescription(humidityLevel) {
   switch (humidityLevel) {
@@ -103,6 +113,11 @@ function getHumidityDescription(humidityLevel) {
   }
 }
 
+function getHumidityIcon(humidityLevel) {
+  const filename = humidityLevel.replace("-", "")
+  return `${process.env.PUBLIC_URL}/assets/icons/humidity${filename}.png`
+}
+
 function getWaterDescription(waterLevel) {
   switch (waterLevel) {
     case "1":
@@ -116,6 +131,11 @@ function getWaterDescription(waterLevel) {
     case "3":
       return "Deeper soil should become moderately dry before re-watering";
   }
+}
+
+function getWaterIcon(waterLevel) {
+  const filename = waterLevel.replace("-", "")
+  return `${process.env.PUBLIC_URL}/assets/icons/water${filename}.png`
 }
 
 function getSoilDescription(soilType) {
@@ -136,6 +156,11 @@ function getSoilDescription(soilType) {
       return "African violets and other Gesneriads";
   }
 }
+
+function getSoilIcon(soilType) {
+  return `${process.env.PUBLIC_URL}/assets/icons/soil${soilType}.png`
+}
+
 
 class App extends Component {
   constructor(props) {
@@ -233,14 +258,15 @@ class App extends Component {
     const plant = this.state.currentPlant;
 
     const rows = [
-      { name: "Light", description: getLightDescription(plant.Light) },
+      { name: "Light", description: getLightDescription(plant.Light), icon: getLightIcon(plant.Light) },
       {
         name: "Temperature",
         description: getTemperatureDescription(plant.Temperature),
+        icon: getTemperatureIcon(plant.Temperature)
       },
-      { name: "Humidity", description: getHumidityDescription(plant.Humidity) },
-      { name: "Watering", description: getWaterDescription(plant.Watering) },
-      { name: "Soil", description: getSoilDescription(plant.Soil) },
+      { name: "Humidity", description: getHumidityDescription(plant.Humidity), icon: getHumidityIcon(plant.Humidity) },
+      { name: "Watering", description: getWaterDescription(plant.Watering), icon: getWaterIcon(plant.Light) },
+      { name: "Soil", description: getSoilDescription(plant.Soil), icon: getSoilIcon(plant.Soil) },
     ];
 
     return (
@@ -260,7 +286,9 @@ class App extends Component {
                     <TableCell component="th" scope="row">
                       <b>{row.name}</b>
                     </TableCell>
-                    <TableCell align="right">{row.description}</TableCell>
+                    <TableCell align="right">{row.description}
+                    </TableCell>
+                    <TableCell><img className="PlantViewPropertyIcon" src={row.icon}/></TableCell>
                   </TableRow>
                 ))}
               </TableBody>
