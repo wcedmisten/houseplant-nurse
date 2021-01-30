@@ -1,15 +1,16 @@
 package main
 
 import (
-	"encoding/csv"
+	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/pgxpool"
 
 	"github.com/rwcarlsen/goexif/exif"
 )
@@ -92,32 +93,30 @@ type Plant struct {
 func PlantHandler(c *gin.Context) {
 	var a []Plant
 
-	// Open CSV file
-	f, err := os.Open("plant_care_data.csv")
+	databaseURL := "postgres://postgres:password@localhost:5432/postgres"
+	// databaseURL = os.Getenv("DATABASE_URL")
+
+	dbpool, err := pgxpool.Connect(context.Background(), databaseURL)
 	if err != nil {
-		panic(err)
+		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
 	}
-	defer f.Close()
+	defer dbpool.Close()
 
-	// Read File into a Variable
-	reader := csv.NewReader(f)
+	var id, scientific_name, common_name, light, temperature, humidity, watering, soil string
+	rows, err := dbpool.Query(context.Background(), "select * from plant_data;")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
+		os.Exit(1)
+	}
 
-	reader.Read() // skip the CSV header
+	for rows.Next() {
+		rows.Scan(&id, &scientific_name, &common_name, &light, &temperature, &humidity, &watering, &soil)
 
-	lines, err := reader.ReadAll()
-
-	for _, line := range lines {
-		id, _ := strconv.Atoi(line[0])
+		id, _ := strconv.Atoi(id)
 
 		a = append(a, Plant{
-			id,
-			line[1],
-			line[2],
-			line[3],
-			line[4],
-			line[5],
-			line[6],
-			line[7],
+			id, scientific_name, common_name, light, temperature, humidity, watering, soil,
 		})
 	}
 
@@ -130,42 +129,34 @@ func PlantHandler(c *gin.Context) {
 func SearchHandler(c *gin.Context) {
 	var a []Plant
 
-	// Open CSV file
-	f, err := os.Open("plant_care_data.csv")
-	if err != nil {
-		panic(err)
-	}
-	defer f.Close()
-
 	searchName := c.Query("name") // shortcut for c.Request.URL.Query().Get("name")
 
-	// Read File into a Variable
-	reader := csv.NewReader(f)
+	databaseURL := "postgres://postgres:password@localhost:5432/postgres"
+	// databaseURL = os.Getenv("DATABASE_URL")
 
-	reader.Read() // skip the CSV header
+	dbpool, err := pgxpool.Connect(context.Background(), databaseURL)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
+	}
+	defer dbpool.Close()
 
-	lines, err := reader.ReadAll()
+	var id, scientific_name, common_name, light, temperature, humidity, watering, soil string
 
-	for _, line := range lines {
-		id, _ := strconv.Atoi(line[0])
+	rows, err := dbpool.Query(context.Background(), "SELECT * FROM plant_data ORDER BY SIMILARITY(common_name, $1) DESC LIMIT 5;", searchName)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
+		os.Exit(1)
+	}
 
-		commonName := line[1]
-		scientificName := line[2]
+	for rows.Next() {
+		rows.Scan(&id, &scientific_name, &common_name, &light, &temperature, &humidity, &watering, &soil)
 
-		if len(searchName) == 0 ||
-			strings.Contains(strings.ToLower(commonName), strings.ToLower(searchName)) ||
-			strings.Contains(strings.ToLower(scientificName), strings.ToLower(searchName)) {
-			a = append(a, Plant{
-				id,
-				line[1],
-				line[2],
-				line[3],
-				line[4],
-				line[5],
-				line[6],
-				line[7],
-			})
-		}
+		id, _ := strconv.Atoi(id)
+
+		a = append(a, Plant{
+			id, scientific_name, common_name, light, temperature, humidity, watering, soil,
+		})
 	}
 
 	// return an empty list if no matches exist
