@@ -174,6 +174,7 @@ class App extends Component {
     this.Row = this.Row.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleClearButtonClick = this.handleClearButtonClick.bind(this);
   }
 
   // when an item in the list has been clicked, set the state to indicate we want to show it
@@ -222,6 +223,25 @@ class App extends Component {
       .catch(console.log);
   }
 
+  // clear the search query
+  handleClearButtonClick() {
+    this.searchBar.value = "";
+    this.setState({ searchVal: null });
+    fetch(`${process.env.PUBLIC_URL}/api/plants`)
+      .then((res) => res.json())
+      .then((data) => {
+        this.setState({ plants: data.plants });
+      })
+      .catch(console.log);
+  }
+
+  // show all plants again and clear the search bar
+  clearSearchButton() {
+    return (
+      <input type="submit" value="Clear" onClick={this.handleClearButtonClick}/>
+    );
+  }
+
 
   // view for showing a list of plants in the catalog
   plantList() {
@@ -229,11 +249,12 @@ class App extends Component {
       <Grid item xs>
         <div className="Search">
           <form onSubmit={this.handleSubmit}>
-          <label>
-            <input type="text" value={this.state.searchVal} onChange={this.handleChange} />
-          </label>
-          <input type="submit" value="Search" />
-        </form>
+            <label>
+              <input type="text" value={this.state.searchVal} ref={el => this.searchBar = el} onChange={this.handleChange} />
+            </label>
+            <input type="submit" value="Search" />
+            {this.state.searchVal != null && this.clearSearchButton()}
+          </form>
         </div>
         <div className="PlantList">
           <AutoSizer>
@@ -303,7 +324,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <h1 className="App-header">Houseplant Nurse 🌱</h1>
+        <h1 className="App-header">Houseplant Nurse <img className="HeaderLogo" src="./assets/icons/logo.png"/></h1>
         <Grid
           container
           spacing={4}

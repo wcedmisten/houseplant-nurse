@@ -9,7 +9,7 @@
 
 .App-header {
   color: #1d9629;
-  display: flex;
+  display: inline;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
@@ -31,5 +31,9 @@
 }
 
 .PlantViewPropertyIcon {
+  max-height: 50px;
+}
+
+.HeaderLogo {
   max-height: 50px;
 }
