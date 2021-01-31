@@ -243,6 +243,7 @@ class App extends Component {
                 width={width}
                 itemSize={80}
                 itemCount={this.state.plants.length}
+                itemData={this.state.plants}
               >
                 {this.Row}
               </FixedSizeList>
