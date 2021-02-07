@@ -3,6 +3,8 @@ services:
   web:
     # image: "webapp:latest"
     build: webapp
+    environment:
+      DATABASE_URL: "postgres://postgres:password@plant_database:5432/postgres"
     ports:
       - "5000:5000"
     links:

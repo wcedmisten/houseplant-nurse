@@ -93,8 +93,7 @@ type Plant struct {
 func PlantHandler(c *gin.Context) {
 	var a []Plant
 
-	databaseURL := "postgres://postgres:password@plant_database:5432/postgres"
-	// databaseURL = os.Getenv("DATABASE_URL")
+	databaseURL = os.Getenv("DATABASE_URL")
 
 	dbpool, err := pgxpool.Connect(context.Background(), databaseURL)
 	if err != nil {
@@ -131,8 +130,7 @@ func SearchHandler(c *gin.Context) {
 
 	searchName := c.Query("name") // shortcut for c.Request.URL.Query().Get("name")
 
-	databaseURL := "postgres://postgres:password@plant_database:5432/postgres"
-	// databaseURL = os.Getenv("DATABASE_URL")
+	databaseURL := os.Getenv("DATABASE_URL")
 
 	dbpool, err := pgxpool.Connect(context.Background(), databaseURL)
 	if err != nil {
