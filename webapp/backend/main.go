@@ -93,7 +93,7 @@ type Plant struct {
 func PlantHandler(c *gin.Context) {
 	var a []Plant
 
-	databaseURL = os.Getenv("DATABASE_URL")
+	databaseURL := os.Getenv("DATABASE_URL")
 
 	dbpool, err := pgxpool.Connect(context.Background(), databaseURL)
 	if err != nil {
