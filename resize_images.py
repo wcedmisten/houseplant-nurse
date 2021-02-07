@@ -8,8 +8,6 @@ paths = [os.path.join(path, fn) for fn in next(os.walk(path))[2]]
 
 
 for image in paths:
-    if "caladium" not in image:
-        continue
     print(image)
     basewidth = 300
     img = Image.open(image)
