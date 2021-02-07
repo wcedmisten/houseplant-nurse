@@ -6,36 +6,28 @@ This website is a visualization of the data found here: https://extension.uga.ed
 
 ## Prerequisites
 
-[Yarn](https://yarnpkg.com/) package manager
+[Docker](https://docs.docker.com) docker engine
 
-[Docker](https://docs.docker.com) docker engine to run a containerized postgres
+[Docker-Compose](https://docs.docker.com/compose/) to orchestrate database and webapp Docker images
+
 
 ## Installation
 
-Node Package Manager (npm) and yarn are required to build this project. Go is also required to run the backend.
+This will build two Docker images:
+
+* `webapp`, which runs the backend Golang logic, and serves the frontend React client
+* `plant_db`, which runs a dedicated Postgres database used to query houseplant data
 
 ```bash
-cd client/
-yarn build
+docker-compose build
 ```
 
 ## Usage
 
+This will serve the webapp on port 5000. You can visit the page in your browser at localhost:5000
+
 ```bash
-# build the postgres image containing the houseplant data:
-docker build -t plant_db .
-# run the docker image and port-forward the necessary ports for postgres
-# NOTE: change the password if running this outside of a private development environment
-docker run -p 5432:5432 -e POSTGRES_PASSWORD=password plant_db
-
-# in a new terminal or tab
-# build the React client with yarn:
-cd client/
-yarn build
-
-cd ..
-# run the Golang backend
-go run main.go
+docker-compose up
 ```
 
 ## License
