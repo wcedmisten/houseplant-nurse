@@ -33,3 +33,10 @@ docker-compose up
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
+
+
+## Screenshots
+
+![Screenshot of the main page](screenshots/screenshot-main.png?raw=true)
+
+![Screenshot of search feature](screenshots/search.png?raw=true)
