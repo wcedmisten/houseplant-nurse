@@ -301,7 +301,7 @@ class App extends Component {
           />
 
           <TableContainer component={Paper}>
-            <Table className="plantDescriptionTable" aria-label="simple table">
+            <Table className="plantDescriptionTable" size="small" aria-label="simple table">
               <TableBody>
                 {rows.map((row) => (
                   <TableRow key={row.name}>
@@ -333,6 +333,7 @@ class App extends Component {
           direction="row"
           justify="center"
           alignItems="center"
+          wrap="wrap-reverse"
         >
           {this.plantList()}
           {this.state.currentPlant != null && this.plantView()}

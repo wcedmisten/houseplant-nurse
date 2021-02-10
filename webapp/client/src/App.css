@@ -12,17 +12,15 @@
   display: inline;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
 }
 
-.PlantList,
-.PlantView {
-  height: 90vh;
+.PlantList {
+  height: 800px;
 }
 
 .PlantViewImage {
-  max-width: 100%;
-  max-height: 60%;
+  max-width: 500px;
+  max-height: 500px;
 }
 
 .PlantViewTitle {
@@ -36,4 +34,6 @@
 
 .HeaderLogo {
   max-height: 50px;
+  vertical-align: middle;
+  padding: 8;
 }
