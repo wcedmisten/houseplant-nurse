@@ -6,9 +6,12 @@ services:
     environment:
       DATABASE_URL: "postgres://postgres:password@plant_database:5432/postgres"
     ports:
-      - "5000:5000"
+      - "443:443"
+      - "80:80"
     links:
       - "postgres:plant_database"
+    volumes:
+      - /home/wedmisten/certs:/certs
   postgres:
     build: plant_db
     # image: "plant_db:latest"

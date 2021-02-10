@@ -54,28 +54,26 @@ func getEXIFData(filename string) (int, float64, float64) {
 	return ISOVal, FNumberFloat, ExposureTimeFloat
 }
 
-func setUpRouter() *gin.Engine {
-	// Set the router as the default one shipped with Gin
-	router := gin.Default()
+func main() {
+	httpsRouter := gin.Default()
+	httpRouter := gin.Default()
+
+	httpRouter.GET("/*path", func(c *gin.Context) {
+		c.Redirect(302, "https://localhost/"+c.Param("variable"))
+	})
 
 	// Serve frontend static files
-	router.Use(static.Serve("/", static.LocalFile("./client/build", true)))
+	httpsRouter.Use(static.Serve("/", static.LocalFile("./client/build", true)))
 
 	// Setup route group for the API
-	api := router.Group("/api")
+	api := httpsRouter.Group("/api")
 
 	api.GET("/plants", PlantHandler)
 
 	api.GET("/search", SearchHandler)
 
-	// Start and run the server
-	return router
-}
-
-func main() {
-	router := setUpRouter()
-
-	router.Run(":5000")
+	go httpsRouter.RunTLS(":443", "/certs/localhost.crt", "/certs/localhost.key")
+	httpRouter.Run(":80")
 }
 
 // Plant represents a houseplant with care data
