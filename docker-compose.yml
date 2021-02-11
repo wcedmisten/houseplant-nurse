@@ -11,7 +11,7 @@ services:
     links:
       - "postgres:plant_database"
     volumes:
-      - /home/wedmisten/certs:/certs
+      - /home/ec2-user/certs:/certs
   postgres:
     build: plant_db
     # image: "plant_db:latest"

@@ -59,7 +59,7 @@ func main() {
 	httpRouter := gin.Default()
 
 	httpRouter.GET("/*path", func(c *gin.Context) {
-		c.Redirect(302, "https://localhost/"+c.Param("variable"))
+		c.Redirect(302, "https://houseplantnurse.life/"+c.Param("variable"))
 	})
 
 	// Serve frontend static files

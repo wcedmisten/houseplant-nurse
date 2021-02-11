@@ -8,7 +8,8 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
 
 # install Golang
 RUN wget https://golang.org/dl/go1.15.8.linux-amd64.tar.gz && \
-    tar -C /usr/local -xzf go1.15.8.linux-amd64.tar.gz
+    tar -C /usr/local -xzf go1.15.8.linux-amd64.tar.gz && \
+    rm go1.15.8.linux-amd64.tar.gz
 
 # setup Golang env variables
 ENV PATH=$PATH:/usr/local/go/bin
